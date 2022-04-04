@@ -1,0 +1,37 @@
+title	str_remove.asm
+
+include irvine32.inc
+
+str_remove proto, sstr: ptr byte, num: dword
+
+.data
+	string	byte	"tranxxxxhai",0
+	nums	dword	4
+
+.code
+main proc
+	invoke	str_remove	,	addr [string +4 ] , nums
+
+	mov	edx, offset string
+	call writestring
+	exit
+main endp
+
+str_remove	proc	uses eax ecx edi esi, sstr:ptr  byte	, num:dword
+	invoke	str_length, sstr
+	mov		ecx, eax
+	inc		eax
+	mov		edi, sstr
+	mov		esi, sstr
+	add		edi, num
+	sub		ecx, num
+	l1:
+		mov		al, [edi]
+		mov		[esi], al
+		inc		edi
+		inc		esi
+	loop l1
+	ret
+str_remove	endp
+
+end main

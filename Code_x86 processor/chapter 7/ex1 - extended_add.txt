@@ -1,0 +1,30 @@
+;--------------------------------------------------------
+Extended_Add PROC
+;
+; Calculates the sum of two extended integers stored
+; as arrays of bytes.
+; Receives: ESI and EDI point to the two integers,
+; EBX points to a variable that will hold the sum,
+; and ECX indicates the number of bytes to be added.
+; Storage for the sum must be one byte longer than the
+; input operands.
+; Returns: nothing
+;--------------------------------------------------------
+	pushad
+	clc 			; clear the Carry flag
+L1: 
+	mov al,[esi] 		; get the first integer
+	adc al,[edi]	 	; add the second integer
+	pushfd 			; save the Carry flag
+	mov [ebx],al 		; store partial sum
+	add esi,1 		; advance all three pointers
+	add edi,1
+	add ebx,1
+	popfd 			; restore the Carry flag
+loop L1 			; repeat the loop
+	mov byte ptr [ebx],0 	; clear high byte of sum
+
+	adc byte ptr [ebx],0 	; add any leftover carry
+	popad
+	ret
+Extended_Add ENDP

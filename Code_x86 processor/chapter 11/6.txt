@@ -1,0 +1,111 @@
+Write a program that creates a new text file. Prompt the user for a student identification number, last name, and first name. Write this information to the file. Input several more records in the same manner and close the file. Write this information to the file one record per line all items comma separated like the following:
+
+12345, Last: Eclipse, First: Lunar
+
+Please use Assembly Language for x86 Processors (7th Edition). Thanks!
+
+------------------------------------------------------------------------------------------------------------------------
+
+To read or write to a file you need to do things in the following order:
+
+Open File
+Read / Write to File
+Close File
+
+To open a file you use the CreateOutputFile procedure. In order to use this you must place the address of a string that contains the file name into the edx register. If the file can be opened without error a file handle will be returned into the eax register. You will need the hand to read and write to the file.
+
+Writing To A File
+
+To write to a file you use the WriteToFile procedure. To make this work you place the number of bytes to write in the ecx register, the file handle into the eax register, and the address of the string you want written to the file in the edx register.
+
+Reading From A File
+
+To read from a file you use the ReadFromFile procedure. To make this work you place the number of byte to read into the ecx register, the file handle into the eax register, and the offset of the array you want to store the read bytes to in the edx register.
+
+Closing The File
+
+To close a file you simply call the CloseFile Procedure
+
+File Write Example:
+
+INCLUDE Irvine32.inc
+
+.data  
+   filename BYTE "test.txt", 0
+   fileHandle HANDLE ?  
+   prompt BYTE "Enter some text", 0dh, 0ah, 0
+   err1 BYTE "Unable to Create File", 0dh, 0ah, 0
+   buffer BYTE 300 dup(?)
+.code
+main PROC
+   ; ask for some text to write to the file
+   mov edx, OFFSET prompt                  ; prompt for text
+   call WriteString               ; Write prompt to screen
+   mov edx, OFFSET buffer
+   mov ecx, SIZEOF buffer
+   call ReadString
+  
+   ;Create the new file
+   mov edx, OFFSET filename
+   call CreateOutputFile                  ; eax now has the file handle
+   mov fileHandle, eax               ; store off the file handle
+
+   ; Check for errors
+   cmp eax, INVALID_HANDLE_VALUE   ; error found?
+   jne FILEOK
+   mov edx, OFFSET err1                 ; display error
+   call WriteString
+   jmp EXITOUT
+
+FILEOK:  
+   ; Write to the file
+   mov eax, fileHandle                           ; File handle to eax
+   mov edx, OFFSET BUFFER                        ; pointer to string to write in edx
+   mov ecx, lengthof buffer                      ; number of bytes to write
+   call WriteToFile;
+   call CloseFile
+
+EXITOUT:
+   exit  
+main ENDP
+END main
+
+File Reading Example:
+
+INCLUDE Irvine32.inc
+
+.data  
+   filename BYTE "test.txt", 0
+   fileHandle HANDLE ?  
+   prompt BYTE "Enter some text", 0dh, 0ah, 0
+   err1 BYTE "Unable to Create File", 0dh, 0ah, 0
+   buffer BYTE 300 dup(?)
+.code
+main PROC
+      
+   ;Create the new file
+   mov edx, OFFSET filename
+   call OpenInputFile              ; eax now has the file handle
+   mov fileHandle, eax               ; store off the file handle
+
+   ; Check for errors
+   cmp eax, INVALID_HANDLE_VALUE   ; error found?
+   jne FILEOK
+   mov edx, OFFSET err1           ; display error
+   call WriteString
+   jmp EXITOUT
+
+FILEOK:  
+   ; Read from file
+   mov eax, fileHandle               ; file handle in eax
+   mov edx, OFFSET buffer           ; address of array to store bytes in
+   mov ecx, lengthof buffer       ; max number of bytes to read
+   call ReadFromFile               ; Read from file
+   call CloseFile                   ; close file
+   mov edx, OFFSET buffer           ; Reset address in edx
+   call WriteString               ; write file contents to the screen.
+   call Crlf  
+EXITOUT:
+   exit  
+main ENDP
+END main

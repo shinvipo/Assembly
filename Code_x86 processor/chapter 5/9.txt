@@ -1,0 +1,24 @@
+include irvine32.inc
+
+.data
+	dem dword ?
+
+.code
+main proc
+	mov dem , 0
+	mov ecx, 10
+
+	call dequy
+	exit
+main endp
+
+dequy proc
+	l1:
+		inc dem
+		cmp dem, ecx
+		jz quit
+		call dequy
+		quit:
+	ret
+dequy endp
+end main

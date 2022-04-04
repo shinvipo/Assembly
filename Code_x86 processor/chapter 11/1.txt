@@ -1,0 +1,39 @@
+include irvine32.inc
+include	macros.inc
+readstr	PROTO,	s:ptr byte	, t:dword 
+
+.data
+	bufSize	= 10
+	buf		byte	bufsize DUP(?)
+.code
+main proc
+	invoke	readstr , addr buf , bufsize 
+
+	exit
+main endp
+
+readstr	PROC ,	s:ptr byte	, t:dword 
+	.data
+	stdInH	handle	?
+	byteRead	dword 0
+	promt	byte	"chuoi qua dai !!!",0
+	.code
+	invoke	getstdhandle , std_input_handle
+	mov		stdInH, eax
+	invoke	readconsole	, stdInH , s , t , addr byteRead , 0
+	mov		eax, byteRead
+	call	writedec 
+	call crlf
+	cmp	eax, t
+	jb	showBuf
+	mov	edx, offset	promt
+	call writestring
+	jmp quit
+	showbuf:
+	mov	edx , s
+	call writestring
+	quit:
+	ret
+readstr ENDP
+
+end main

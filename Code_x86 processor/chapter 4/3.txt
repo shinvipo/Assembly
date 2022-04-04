@@ -1,0 +1,29 @@
+
+INCLUDE Irvine32.inc
+
+.data
+		arr		dword	0,2,5,9,10
+		len		equ		lengthof arr
+		sz		equ		type arr
+		res		dword	0
+.code
+main PROC
+		mov		ecx, len - 1
+		mov		esi, offset arr
+	loop1:
+		mov		eax, [esi]
+		mov		ebx, [esi+sz]
+		
+		sub		ebx,eax
+		add		res,ebx
+
+		add		esi, sz
+
+		loop	loop1
+
+		mov		eax, res
+		call	DumpRegs
+
+	exit
+main ENDP
+END main

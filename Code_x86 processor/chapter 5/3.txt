@@ -1,0 +1,41 @@
+Include Irvine32.inc
+
+.data
+		promt		byte		"Nhap 2 so nguyen : ",0
+		res			byte		"ket qua la : ",0
+		int1		dword		?
+		int2		dword		?
+		sum			dword		?
+
+.code
+	main proc
+		call Clrscr
+
+		;chi chuyen con tro ra giua man hinh
+		mov dh,		13			; y-coordinate range 0-24
+		mov	dl,		40			; x-coordinate range 0-79
+		call GoToXY				; locate cursor
+
+		mov		edx, offset promt
+		call	WriteString
+		call	readint
+		mov		int1,eax
+		call	readint
+		mov		int2,eax
+
+		mov		eax, int1
+		add		eax, int2
+		mov		sum, eax
+
+		mov		edx, offset res
+		call	writestring
+		mov		eax, sum
+		call	writeint
+
+		call	crlf
+		call	waitmsg
+
+		exit
+
+	main endp
+	end main

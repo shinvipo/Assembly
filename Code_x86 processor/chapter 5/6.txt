@@ -1,0 +1,46 @@
+include irvine32.inc 
+
+.data
+	L = 10
+	arr byte L DUP(?)
+	
+
+.code
+
+main proc
+	mov	ecx, 20
+	mov ebx , 0
+	l1:
+		mov eax, ebx
+		call writedec
+		mov al, ' '
+		call writechar
+		mov	eax, L
+		mov esi , offset arr
+		call RandomString
+		inc ebx
+		loop l1
+		call waitmsg
+		exit
+main endp
+
+RandomString proc
+	push ecx
+	push eax
+	mov ecx , eax
+	l2:
+		mov eax, 26
+		call randomrange
+		add eax, 65
+		mov [esi], eax
+		inc esi
+
+		call writechar
+	loop l2
+
+	call crlf
+	pop eax
+	pop	ecx
+	ret
+RandomString endp
+end main

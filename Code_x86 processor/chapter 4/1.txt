@@ -1,0 +1,29 @@
+
+INCLUDE Irvine32.inc
+
+.data
+bigEndian	byte	12h,34h,56h,78h
+littleEndian	dword	?
+
+.code
+main PROC
+                mov     al, [bigEndian+3]       ;swap 78h and 12h
+                mov     ah, [bigEndian]     
+                mov     [bigEndian], al
+                mov     [bigEndian+3], ah
+
+                mov     al, [bigEndian+2]       ;swap 56h and 34h
+                mov     ah, [bigEndian+1]
+                mov     [bigEndian+1], al
+                mov     [bigEndian+2], ah
+
+                mov     eax, DWORD PTR bigEndian    ;move reverse ordered bytes to eax
+                mov     littleEndian, eax       ;move reverse ordered byted to littleEndian
+
+                mov     eax, littleEndian
+call	DumpRegs
+
+
+	exit
+main ENDP
+END main

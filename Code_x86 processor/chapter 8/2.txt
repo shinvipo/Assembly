@@ -1,0 +1,73 @@
+include irvine32.inc
+
+Print	PROTO	 kytu: byte , nen: byte, chu: byte
+Print1	PROTO	
+Print2	PROTO
+loca	PROTO	valX:byte, valY: byte
+
+
+.data
+	rows = 8 
+	cols = 8
+	valsX byte 55
+	valsY byte 0
+
+.code
+
+main PROC
+		mov		ecx,	4
+		mov		dh, valsY
+		mov		dl,	valsX
+	L1:
+		call	gotoxy
+		call	print1
+		call	crlf
+
+		inc		dh
+		call	gotoxy
+		call	print2
+		call	crlf
+		inc		dh
+	loop L1
+	mov		eax, white + (black * 16)
+	call	settextcolor
+	exit
+main ENDP
+
+print	PROC USES eax , kytu:byte , nen:byte, chu:byte
+	mov		eax ,0
+	movzx	eax, nen
+	shl		eax,4
+	or		al, chu
+	call	settextcolor
+	mov		al,		kytu
+	call	writechar
+	ret
+print ENDP
+		
+print1	PROC	uses ecx
+	mov		ecx, 4
+	l2:
+		push	gray
+		push	gray
+		push	' '
+		call	print
+		invoke	print, ' ', gray , gray
+		invoke	print, ' ', white , white
+		invoke	print, ' ', white , white
+	loop l2
+		ret
+print1	ENDP
+
+print2	PROC	uses	ecx
+	mov		ecx , 4
+	l3:
+		invoke	print, ' ', white , white
+		invoke	print, ' ', white , white
+		invoke	print, ' ', gray , gray
+		invoke	print, ' ', gray , gray
+	loop l3
+		RET
+print2	ENDP
+
+end main

@@ -1,0 +1,69 @@
+TITLE Test Score Evaluation
+; This program generates 10 random scores between 50 and 100 inclusive and
+; passes each of them to the CalcGrade procedure which returns the
+; corresponding letter grade for each score.
+
+
+include irvine32.inc
+
+.data
+	diem	word	?
+	str1	byte	"Decimal score : ", 0
+	str2	byte	"Letter Grade : ", 0
+.code
+main proc
+	mov ecx, 10
+l1:
+	mov eax, 0
+	mov edx, offset str1
+	call writestring
+
+	mov eax, 51
+	call randomrange
+	add eax, 50
+	call writedec
+	call crlf
+
+	mov edx, offset str2
+	call writestring
+
+	call calcGrade
+
+	call writechar
+	call crlf
+loop l1
+	exit
+main endp
+
+calcGrade proc
+	cmp	eax, 90
+	jae	gradeA
+	cmp eax, 80
+	jae	gradeB
+	cmp eax, 70
+	jae gradeC
+	cmp	eax, 60
+	jae gradeD
+	cmp	eax, 59
+	jbe gradeF
+
+	gradeA:
+		mov al,'A'
+		jmp done
+	gradeB:
+		mov	al, 'B'
+		jmp done
+	gradeC:
+		mov al, 'C'
+		jmp done
+	gradeD:
+		mov al, 'D'
+		jmp done
+	gradeF:
+		mov al, 'F'
+		jmp done
+	done:
+	ret
+calcGrade endp
+
+end main

@@ -1,0 +1,43 @@
+include irvine32.inc
+
+GCD		PROTO	val1:dword, val2: Dword
+Result	PROTO	val1:dword, val2: Dword
+
+.data
+	
+
+.code
+main proc
+	invoke result , 5,20
+	invoke result ,	24, 18
+	invoke result , 11,7
+	invoke result ,432,226
+	invoke result ,26,13
+	exit
+main endp
+
+GCD PROC	val1:dword ,	val2:Dword
+		local	res:dword
+		cmp	val2, 0
+		jnz	continues
+		mov	eax,	val1
+		jmp	quit
+	continues:
+		mov	edx,	0
+		mov	eax,	val1
+		mov	ebx,	val2
+		div	ebx
+		mov	val1,	edx
+		invoke	GCD, val2 , val1
+	quit:
+	ret
+GCD ENDP
+
+Result		PROC	val1:dword, val2:dword
+	invoke	GCD, val1 , val2
+	call writedec
+	call crlf
+	ret
+result	endp
+
+end main

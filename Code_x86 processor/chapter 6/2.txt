@@ -1,0 +1,34 @@
+include irvine32.inc
+
+.data
+	arr	dword 1,2,3,4,5,6,7,8,9,10
+	sz	dword sizeof dword
+	len	dword lengthof arr
+	sum	dword ?
+	i = 0
+	j = 0
+.code
+main proc
+	mov ecx, len
+	mov esi, offset arr
+	mov sum, 0
+
+	i = 3
+	j = 9
+
+	l1:
+		mov	eax, [esi]
+		cmp eax, i
+		jl next
+		cmp eax, j
+		jg	next
+		add sum, eax
+		next:
+		add esi, sz
+		loop l1
+
+		mov eax, sum
+		call writeint
+		exit 
+main endp
+end main

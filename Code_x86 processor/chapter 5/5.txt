@@ -1,0 +1,36 @@
+
+INCLUDE Irvine32.inc
+
+.data
+
+.code
+    main PROC
+        call Clrscr
+        mov eax, 500
+        mov ebx, 100
+        mov ecx, 50
+
+        L1:
+            push eax          
+            push ebx
+
+            call BetterRandomRange
+
+            pop ebx
+            pop eax
+        Loop L1
+
+        call WaitMsg
+        exit
+    main ENDP
+
+    BetterRandomRange PROC
+        sub eax, ebx        
+        call RandomRange    ; generate random int in range 0 - (upper - lower)           
+        add eax, ebx        ;  add lower to result
+        call WriteInt        ; write signed decimal
+        call Crlf
+        ret
+    BetterRandomRange ENDP
+
+END main

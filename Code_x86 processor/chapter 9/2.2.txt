@@ -1,0 +1,28 @@
+include irvine32.inc
+	
+str_concat	PROTO,	s:ptr byte	, t:ptr byte
+
+.data
+	target	byte	"tran//",10 DUP(0)
+	source	byte	"hai",0
+.code
+main proc
+	mov	ecx, lengthof source
+	invoke	str_concat , addr source , addr target
+	mov		edx, offset target
+	call	writestring
+	exit
+main endp
+
+str_concat	PROC uses eax ecx edi esi,	s:ptr byte	, t:ptr byte
+	invoke	str_length	, t
+	inc	ecx
+	mov	esi,  s
+	mov	edi,  t
+	add	edi, eax
+	cld
+	rep	movsb
+	ret
+str_concat ENDP
+
+end main

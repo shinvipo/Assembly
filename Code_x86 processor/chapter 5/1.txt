@@ -1,0 +1,25 @@
+INCLUDE Irvine32.inc
+
+.data
+str1 BYTE "This is a coloured string.",0
+.code
+main PROC
+
+    MOV ECX, 4
+    MOV EAX, green + (white*16)
+    MOV EDX, OFFSET str1
+
+    L1:
+
+        call SetTextColor
+        call WriteString
+        call Crlf
+        INC EAX
+
+    LOOP L1
+
+    call WaitMsg
+    exit
+main ENDP
+
+END main

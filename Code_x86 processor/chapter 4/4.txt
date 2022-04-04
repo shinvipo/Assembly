@@ -1,0 +1,26 @@
+
+INCLUDE Irvine32.inc
+
+.data
+		sc		word	1112h, 1124h, 1156h,1178h
+		des		dword	?
+.code
+main PROC
+		mov		esi, offset des
+		mov		edi, offset sc
+		mov		ecx, lengthof	sc
+	loopX:
+		mov		eax,0
+		mov		ax, word ptr [edi]
+		mov		[esi], eax
+
+		add		esi, type	des
+		add		edi, type	sc
+
+		loop	loopX
+
+		call	DumpRegs
+
+	exit
+main ENDP
+END main

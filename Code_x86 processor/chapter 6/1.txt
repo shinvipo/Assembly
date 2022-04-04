@@ -1,0 +1,49 @@
+include irvine32.inc
+
+N = 10
+
+.data
+	arr dword N DUP(?)
+	sz = sizeof arr
+	i sdword ?
+	j sdword ?
+.code
+main proc
+	mov esi, offset arr
+	mov ecx, N
+	call FillArr
+
+	call crlf
+	call fillarr
+	call crlf
+	exit
+main endp
+
+FillArr proc
+	push ecx
+	push esi
+
+	call readint
+	mov j, eax
+	call readint
+	mov i, eax
+l2:
+	mov eax , i
+	mov ebx , j
+
+	sub eax, ebx
+	call randomrange
+	add eax , ebx
+
+	call writeint
+	mov eax, ' '
+	call writechar
+
+	loop l2
+
+	pop esi
+	pop ecx
+	ret
+FillArr endp
+
+end main

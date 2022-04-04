@@ -1,0 +1,15 @@
+
+INCLUDE Irvine32.inc
+
+.data
+byte1 byte 12.334
+word1 word 12345
+dword1 dword 1234567
+dword2 dword 12.2
+realx real4 15.6666666
+.code
+main PROC
+
+	exit
+main ENDP
+END main

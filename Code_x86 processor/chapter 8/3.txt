@@ -1,0 +1,82 @@
+include irvine32.inc
+
+Print		PROTO	kytu: byte , nen: byte, chu: byte
+Print1		PROTO	color: byte
+Print2		PROTO	color: byte
+chessboard	PROTO	color: byte
+
+
+.data
+	rows = 8 
+	cols = 8
+	valsX byte 55
+	valsY byte 0
+	colors byte 0
+.code
+
+main PROC
+	mov		ecx, 16
+ll:
+	call	clrscr
+	invoke	chessboard , colors 
+	inc		colors
+	mov		eax, 1000
+	call	delay
+	loop ll
+	exit
+main ENDP
+
+print	PROC USES eax , kytu:byte , nen:byte, chu:byte
+	mov		eax ,0
+	movzx	eax, nen
+	shl		eax,4
+	add		al, chu
+	call	settextcolor
+	mov		al,		kytu
+	call	writechar
+	ret
+print ENDP
+		
+print1	PROC	uses ecx, color:byte
+	mov		ecx, 4
+	l2:
+		invoke	print, ' ', color, color
+		invoke	print, ' ', color , color
+		invoke	print, ' ', white , white
+		invoke	print, ' ', white , white
+	loop l2
+		ret
+print1	ENDP
+
+print2	PROC	uses	ecx, color:byte
+	mov		ecx , 4
+	l3:
+		invoke	print, ' ', white , white
+		invoke	print, ' ', white , white
+		invoke	print, ' ', color , color
+		invoke	print, ' ', color , color
+	loop l3
+		RET
+print2	ENDP
+
+chessboard proc uses ecx edx , color:byte
+		mov		ecx,	4
+		mov		dh, valsY
+		mov		dl,	valsX
+	L1:
+		call	gotoxy
+		invoke	print1, color
+		call	crlf
+
+		inc		dh
+		call	gotoxy
+		invoke	print2, color
+		call	crlf
+		inc		dh
+	loop L1
+		mov		eax, white + (black * 16)
+		call	settextcolor
+	ret
+chessboard	endp
+
+end main

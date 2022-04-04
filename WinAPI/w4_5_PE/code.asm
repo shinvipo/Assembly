@@ -524,7 +524,6 @@ arr_sum proc uses eax ecx ebx edi, lpArr: DWORD, lenArr: DWORD
 	ret
 arr_sum endp
 
-
 importDirec proc
 	pushad
 	

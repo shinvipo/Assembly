@@ -1,0 +1,99 @@
+include irvine32.inc
+
+.data
+	true = 1
+	false = 0
+	gradeAverage	byte	"Enter ur grade average : ",0
+	credit			byte	"Enter ur Credit : ",0
+	errormsg		byte "Invalid Credits !!!",10,0
+	okmsg			byte "Can Regis !!",10,0
+	failmsg			byte "Cannot Regis !!",10,0
+	
+	credits		word ?
+	gA			word ?
+	OkToRegis	byte ?
+	validInp	byte ?
+.code
+main proc
+	mov		edx, offset gradeAverage
+	call	writestring
+	call	readdec
+	mov		gA, ax
+	call	crlf
+
+	mov		edx, offset credit
+	call	writestring 
+	call	readdec
+	mov		credits, ax
+
+	call	checkCredits
+	cmp		validInp, False			;;
+	jnz		Continue1
+	mov		edx, offset errormsg
+	call	writestring 
+	jmp		quit
+
+	Continue1:
+	call canOrnotRegis
+	cmp OkToRegis, False
+	jnz Continue2
+	mov		edx, offset failmsg
+	call	writestring
+	jmp		quit
+
+	Continue2:
+	mov		edx, offset okmsg
+	call    writestring
+
+	quit:
+	exit
+main endp
+
+checkCredits proc
+	
+	cmp credits, 1
+	jb	Sai
+	cmp credits, 30
+	jb	Dung
+
+	Sai:
+	mov validInp, False
+	jmp done
+
+	Dung:
+	mov validInp, True
+	jmp done
+
+	done:
+	ret
+checkCredits endp
+
+canOrnotRegis proc
+	mov		OkToRegis, false
+	cmp		gA, 350
+	ja		Can
+	cmp		gA, 250
+	ja		continues3
+	jmp		continues4
+
+	continues3:
+	cmp		credits, 16
+	jbe		can
+
+	continues4:
+	cmp		credits, 12
+	jbe		can
+
+	can:
+	mov		OkToRegis, True
+	jmp		done
+
+	cannot:
+	mov		OkToRegis, False
+	jmp		done
+
+	done:
+	ret
+canOrnotRegis endp
+
+end main

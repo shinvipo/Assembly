@@ -1,0 +1,35 @@
+include irvine32.inc
+
+.data
+	rows word ?
+	cols word ?
+
+.code
+main proc
+	call getmaxxy
+	mov rows, ax
+	mov cols, dx
+
+	mov ecx, 1000
+	l1:
+	movzx eax, rows		; movzx: move with zero-extend
+	call randomrange
+	mov dh, al
+
+	movzx eax, cols
+	call randomrange
+	mov dl,al
+
+	call gotoxy
+
+	mov eax, '*'
+	call writechar
+
+;	mov eax, 100
+;	call delay
+	loop l1
+
+;	call waitmsg
+	exit
+	main endp
+	end main
